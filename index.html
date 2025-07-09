@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plastick Embalagens - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo-container">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Analise de dados Empresa </h1>
+                    <p>Banco de dados</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <div class="nav-container">
+            <button class="nav-tab active" data-tab-target="dados-tab">
+                <i class="fas fa-chart-line"></i> Dados
+            </button>
+            <button class="nav-tab" data-tab-target="vendas-tab">
+                <i class="fas fa-money-bill-wave"></i> Vendas
+            </button>
+            <button class="nav-tab" data-tab-target="contabilidade-tab">
+                <i class="fas fa-calculator"></i> Contabilidade
+            </button>
+            <button class="nav-tab" data-tab-target="coletar-dados-tab">
+                <i class="fas fa-file-import"></i> Coletar de dados
+            </button>
+            <button class="nav-tab" data-tab-target="coletar-contabilidade-tab">
+                <i class="fas fa-file-invoice"></i> Coletar da Contabilidade
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Seção Dados -->
+        <section id="dados-tab" class="tab-content active" role="tabpanel" aria-labelledby="tab-dados">
+            <h2 class="section-title">Dados de Vendas Detalhados</h2>
+            <form id="formProdutos" class="form-filter" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="nomeBusca">Nome do Produto:</label>
+                    <input type="text" id="nomeBusca" name="nome" placeholder="Ex: Bolsa 23" />
+                </div>
+                <div class="form-group">
+                    <label for="clienteBusca">Cliente:</label>
+                    <input type="text" id="clienteBusca" name="cliente" placeholder="Ex: João da Silva" />
+                </div>
+                <div class="form-group">
+                    <label for="dataBusca">Data do Produto:</label>
+                    <input type="date" id="dataBusca" name="data" />
+                </div>
+                <button id="buscarDados" type="button">Buscar Dados</button>
+            </form>
+            <div class="table-card" style="margin-top: 1.5rem;">
+                <div class="table-header">
+                    <h3>Resultados da Busca</h3>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto</th>
+                                <th>Cliente</th>
+                                <th>Preço</th>
+                                <th>Vendas</th>
+                                <th>Data</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-dados">
+                            <tr><td colspan="7">Use os filtros acima para buscar dados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Vendas -->
+        <section id="vendas-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-vendas" tabindex="0">
+            <h2 class="section-title">Apurado das Vendas</h2>
+            <section class="financial-data-grid">
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-blue-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <span class="data-card__percentage text-blue-percentage">+5.0%</span>
+                    </div>
+                    <div class="data-card__label">Tudo</div>
+                    <div class="data-card__value" id="vendasTudo">R$ 25.640,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-yellow-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <span class="data-card__percentage text-yellow-percentage">+2.5%</span>
+                    </div>
+                    <div class="data-card__label">Aguardando Pagamento</div>
+                    <div class="data-card__value" id="vendasAguardandoPagamento">R$ 3.200,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-red-icon">
+                            <i class="fas fa-undo-alt"></i>
+                        </div>
+                        <span class="data-card__percentage text-red-percentage">-1.2%</span>
+                    </div>
+                    <div class="data-card__label">Reembolsado</div>
+                    <div class="data-card__value" id="vendasReembolsado">R$ 780,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-orange-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <span class="data-card__percentage text-gray-percentage">+0.5%</span>
+                    </div>
+                    <div class="data-card__label">Chargeback</div>
+                    <div class="data-card__value" id="vendasChargeback">R$ 450,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-green-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <span class="data-card__percentage text-teal-percentage">+3.0%</span>
+                    </div>
+                    <div class="data-card__label">Recolhido</div>
+                    <div class="data-card__value" id="vendasRecolhido">R$ 21.210,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-purple-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <span class="data-card__percentage text-green-percentage">+8.7%</span>
+                    </div>
+                    <div class="data-card__label">Total de Vendas</div>
+                    <div class="data-card__value" id="vendasTotalValor">R$ 26.890,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+            </section>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Gráfico de Vendas</h3>
+                    <input type="date" id="dataVendas" class="chart-filter">
+                </div>
+                <div class="chart-container">
+                    <canvas id="vendasChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Contabilidade -->
+        <section id="contabilidade-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-contabilidade" tabindex="0">
+            <h2 class="section-title">Contas e Despesas da Empresa</h2>
+            <section class="financial-data-grid">
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-purple-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <span class="data-card__percentage text-red-percentage">-2.0%</span>
+                    </div>
+                    <div class="data-card__label">Impostos</div>
+                    <div class="data-card__value" id="contabilidadeImpostos">R$ 3.200,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-red-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <span class="data-card__percentage text-red-percentage">+1.0%</span>
+                    </div>
+                    <div class="data-card__label">Despesas com matéria-prima</div>
+                    <div class="data-card__value" id="contabilidadeMateriaPrima">R$ 8.500,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-blue-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span class="data-card__percentage text-green-percentage">+0.8%</span>
+                    </div>
+                    <div class="data-card__label">Apurado do mês</div>
+                    <div class="data-card__value" id="contabilidadeApuradoMes">R$ 21.210,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-green-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <span class="data-card__percentage text-green-percentage">+3.5%</span>
+                    </div>
+                    <div class="data-card__label">Lucro do mês</div>
+                    <div class="data-card__value" id="contabilidadeLucroMes">R$ 9.510,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-orange-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="data-card__percentage text-red-percentage">-0.5%</span>
+                    </div>
+                    <div class="data-card__label">Despesa dos salários dos funcionários</div>
+                    <div class="data-card__value" id="contabilidadeSalarios">R$ 6.500,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card__header">
+                        <div class="data-card__icon bg-yellow-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <span class="data-card__percentage text-green-percentage">+1.2%</span>
+                    </div>
+                    <div class="data-card__label">Total de receitas</div>
+                    <div class="data-card__value" id="contabilidadeTotalVendas">R$ 26.890,00</div>
+                    <div class="data-card__period">Este mês</div>
+                </div>
+            </section>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Gráfico de Contabilidade</h3>
+                    <input type="date" id="dataContabilidade" class="chart-filter">
+                </div>
+                <div class="chart-container">
+                    <canvas id="contabilidadeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Coletar Dados -->
+        <section id="coletar-dados-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-coletar-dados" tabindex="0">
+            <h2 class="section-title">Coletar de Dados de Vendas</h2>
+            <form id="formColetarDados" class="form-filter">
+                <div class="form-group">
+                    <label for="produtoNome">Nome do Produto:</label>
+                    <input type="text" id="produtoNome" name="produto" required placeholder="Ex: Sacola Plástica 50x70" />
+                </div>
+                <div class="form-group">
+                    <label for="clienteNome">Cliente:</label>
+                    <input type="text" id="clienteNome" name="cliente" required placeholder="Ex: Supermercado Preço Bom" />
+                </div>
+                <div class="form-group">
+                    <label for="precoProduto">Preço:</label>
+                    <input type="number" id="precoProduto" name="preco" step="0.01" required placeholder="Ex: 25.50" />
+                </div>
+                <div class="form-group">
+                    <label for="vendasTotal">Vendas (Valor Total):</label>
+                    <input type="number" id="vendasTotal" name="vendas" step="0.01" required placeholder="Ex: 500.00" />
+                </div>
+                <div class="form-group">
+                    <label for="quantidadeProduto">Quantidade Vendida:</label>
+                    <input type="number" id="quantidadeProduto" name="quantidade" required placeholder="Ex: 20" />
+                </div>
+                <div class="form-group">
+                    <label for="dataMes">Data da Venda:</label>
+                    <input type="date" id="dataMes" name="data" required />
+                </div>
+                <button id="enviarDadosBtn" type="submit">Enviar Dados de Venda</button>
+            </form>
+            <p id="mensagemStatus"></p>
+        </section> 
+
+        <!-- Seção Coletar Contabilidade -->
+        <section id="coletar-contabilidade-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-coletar-contabilidade" tabindex="0">
+            <h2 class="section-title">Coletar Dados de Contabilidade</h2>
+            <form id="formColetarContabilidade" class="form-filter">
+                <div class="form-group">
+                    <label for="impostosContabilidade">Impostos:</label>
+                    <input type="number" id="impostosContabilidade" name="impostos" step="0.01" required placeholder="Ex: 1500.00" />
+                </div>
+                <div class="form-group">
+                    <label for="materiaPrimaContabilidade">Despesas com matéria-prima:</label>
+                    <input type="number" id="materiaPrimaContabilidade" name="materiaPrima" step="0.01" required placeholder="Ex: 10000.00" />
+                </div>
+                <div class="form-group">
+                    <label for="apuradoMesContabilidade">Apurado do Mês (Receita Líquida):</label>
+                    <input type="number" id="apuradoMesContabilidade" name="apuradoMes" step="0.01" required placeholder="Ex: 45000.00" />
+                </div>
+                <div class="form-group">
+                    <label for="lucroMesContabilidade">Lucro do mês:</label>
+                    <input type="number" id="lucroMesContabilidade" name="lucroMes" step="0.01" required placeholder="Ex: 8000.00" />
+                </div>
+                <div class="form-group">
+                    <label for="salariosContabilidade">Despesa dos salários dos funcionários:</label>
+                    <input type="number" id="salariosContabilidade" name="salarios" step="0.01" required placeholder="Ex: 12000.00" />
+                </div>
+                <div class="form-group">
+                    <label for="totalReceitasContabilidade">Total de Receitas:</label>
+                    <input type="number" id="totalReceitasContabilidade" name="totalReceitas" step="0.01" required placeholder="Ex: 60000.00" />
+                </div>
+                <div class="form-group">
+                    <label for="dataContabilidadeMes">Data do Mês (Referência):</label>
+                    <input type="date" id="dataContabilidadeMes" name="dataMesContabilidade" required />
+                </div>
+                <button id="enviarContabilidadeBtn" type="submit">Enviar Dados Contábeis</button>
+            </form>
+            <p id="mensagemStatusContabilidade"></p>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Variáveis para armazenar instâncias dos gráficos
+            let vendasChart = null;
+            let contabilidadeChart = null;
+            
+            // Seleciona todas as abas e conteúdos
+            const tabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Função para ativar uma aba
+            function activateTab(tabId) {
+                // Remove classe ativa de todas as abas e conteúdos
+                tabs.forEach(tab => tab.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Ativa a aba e conteúdo selecionados
+                document.querySelector(`.nav-tab[data-tab-target="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Carrega dados específicos para cada aba
+                if (tabId === 'dados-tab') {
+                    // Carrega todos os dados inicialmente para a aba "Dados" sem filtros
+                    buscarEExibirDados();
+                } else if (tabId === 'vendas-tab') {
+                    // Inicializa ou atualiza o gráfico de vendas
+                    initVendasChart();
+                } else if (tabId === 'contabilidade-tab') {
+                    // Inicializa ou atualiza o gráfico de contabilidade
+                    initContabilidadeChart();
+                }
+            }
+            
+            // Adiciona evento de clique a cada aba
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tabTarget;
+                    activateTab(tabId);
+                });
+            });
+            
+            // Ativa a aba inicial
+            activateTab('dados-tab');
+            
+            // Função para buscar e exibir dados
+            async function buscarEExibirDados(filtros = {}) {
+                const tabela = document.getElementById('tabela-dados');
+                if (!tabela) return;
+                
+                tabela.innerHTML = '<tr><td colspan="7">🔍 Buscando dados, por favor aguarde...</td></tr>';
+                
+                try {
+                    // Simulação de dados enquanto não tem API
+                    const dados = [
+                        { id: 1, produto: "Sacola Plástica 50x70", cliente: "Supermercado Preço Bom", preco: 25.50, vendas: 510.00, data: "2023-10-15", quantidade: 20 },
+                        { id: 2, produto: "Filme PVC 30cm", cliente: "Restaurante Sabor da Casa", preco: 42.80, vendas: 1284.00, data: "2023-10-18", quantidade: 30 },
+                        { id: 3, produto: "Saco de Lixo 100L", cliente: "Condomínio Solar", preco: 18.90, vendas: 567.00, data: "2023-10-20", quantidade: 30 },
+                        { id: 4, produto: "Embalagem Alumínio", cliente: "Confeitaria Doce Vida", preco: 65.00, vendas: 1300.00, data: "2023-10-22", quantidade: 20 },
+                        { id: 5, produto: "Garrafa PET 500ml", cliente: "Indústria de Refrigerantes", preco: 0.85, vendas: 4250.00, data: "2023-10-25", quantidade: 5000 },
+                        { id: 6, produto: "Caixa Papelão", cliente: "Loja de Móveis", preco: 8.50, vendas: 510.00, data: "2023-10-28", quantidade: 60 }
+                    ];
+                    
+                    // Filtra os dados se necessário
+                    const dadosFiltrados = filtrarDados(dados, filtros);
+                    renderizarTabela(dadosFiltrados);
+                } catch (erro) {
+                    console.error('❌ Erro ao buscar dados:', erro);
+                    tabela.innerHTML = '<tr><td colspan="7">❌ Erro ao buscar os dados. Verifique sua conexão com o servidor.</td></tr>';
+                }
+            }
+            
+            // Função para filtrar dados localmente (simulação)
+            function filtrarDados(dados, filtros) {
+                return dados.filter(item => {
+                    // Filtro por nome do produto
+                    if (filtros.nome && !item.produto.toLowerCase().includes(filtros.nome.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    // Filtro por cliente
+                    if (filtros.cliente && !item.cliente.toLowerCase().includes(filtros.cliente.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    // Filtro por data
+                    if (filtros.data && item.data !== filtros.data) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            }
+            
+            // Função para renderizar a tabela
+            function renderizarTabela(dados) {
+                const tabela = document.getElementById('tabela-dados');
+                tabela.innerHTML = '';
+                
+                if (!dados || dados.length === 0) {
+                    tabela.innerHTML = '<tr><td colspan="7">⚠️ Nenhum dado encontrado para os filtros aplicados.</td></tr>';
+                    return;
+                }
+                
+                dados.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.id ?? 'N/A'}</td>
+                        <td>${item.produto ?? 'N/A'}</td>
+                        <td>${item.cliente ?? 'N/A'}</td>
+                        <td>${formatarPreco(item.preco)}</td>
+                        <td>${formatarPreco(item.vendas)}</td>
+                        <td>${formatarData(item.data)}</td>
+                        <td>${item.quantidade ?? 'N/A'}</td>
+                    `;
+                    tabela.appendChild(row);
+                });
+            }
+            
+            // Função para formatar preço
+            function formatarPreco(valor) {
+                if (valor == null) return 'R$ 0,00';
+                // Garante que o valor é um número
+                const num = parseFloat(valor);
+                return isNaN(num) ? 'R$ 0,00' : `R$ ${num.toFixed(2).replace('.', ',')}`;
+            }
+            
+            // Função para formatar data
+            function formatarData(dataString) {
+                if (!dataString) return 'N/A';
+                try {
+                    // Para datas no formato ISO
+                    if (dataString.includes('T')) {
+                        return new Date(dataString).toLocaleDateString('pt-BR');
+                    }
+                    
+                    // Para datas no formato YYYY-MM-DD
+                    const [ano, mes, dia] = dataString.split('-');
+                    return `${dia}/${mes}/${ano}`;
+                } catch (e) {
+                    console.error('Erro ao formatar data:', e);
+                    return 'Data inválida';
+                }
+            }
+            
+            // Adiciona evento ao botão de busca
+            const buscarBtn = document.getElementById('buscarDados');
+            if (buscarBtn) {
+                buscarBtn.addEventListener('click', () => {
+                    const nome = document.getElementById('nomeBusca')?.value.trim() || '';
+                    const cliente = document.getElementById('clienteBusca')?.value.trim() || '';
+                    const data = document.getElementById('dataBusca')?.value || '';
+                    
+                    buscarEExibirDados({ nome, cliente, data });
+                });
+            }
+            
+            // Inicializar gráfico de vendas (linha)
+            function initVendasChart() {
+                // Destruir gráfico anterior se existir
+                if (vendasChart) {
+                    vendasChart.destroy();
+                }
+                
+                const ctx = document.getElementById('vendasChart').getContext('2d');
+                vendasChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+                        datasets: [{
+                            label: 'Vendas Mensais (R$)',
+                            data: [18500, 19200, 21000, 19800, 22500, 24500, 23000, 26890, 25000, 26890],
+                            backgroundColor: 'rgba(143, 148, 251, 0.1)',
+                            borderColor: 'rgba(143, 148, 251, 1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#8f94fb',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#a0a0d0',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(25, 25, 35, 0.9)',
+                                titleColor: '#8f94fb',
+                                bodyColor: '#e0e0e0',
+                                borderColor: 'rgba(143, 148, 251, 0.3)',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#a0a0d0',
+                                    callback: function(value) {
+                                        return 'R$ ' + value.toLocaleString('pt-BR');
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Valor em R$',
+                                    color: '#a0a0d0'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#a0a0d0'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Meses',
+                                    color: '#a0a0d0'
+                                }
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        }
+                    }
+                });
+            }
+            
+            // Inicializar gráfico de contabilidade (pizza)
+            function initContabilidadeChart() {
+                // Destruir gráfico anterior se existir
+                if (contabilidadeChart) {
+                    contabilidadeChart.destroy();
+                }
+                
+                const ctx = document.getElementById('contabilidadeChart').getContext('2d');
+                contabilidadeChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Impostos', 'Matéria Prima', 'Salários', 'Lucro', 'Outras Despesas'],
+                        datasets: [{
+                            data: [3200, 8500, 6500, 9510, 2180],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(153, 102, 255, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#a0a0d0',
+                                    font: {
+                                        size: 12
+                                    },
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(25, 25, 35, 0.9)',
+                                titleColor: '#8f94fb',
+                                bodyColor: '#e0e0e0',
+                                borderColor: 'rgba(143, 148, 251, 0.3)',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.chart.getDatasetMeta(0).total;
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${label}: R$ ${value.toLocaleString('pt-BR')} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '50%',
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true
+                        }
+                    }
+                });
+            }
+            
+            // Adiciona eventos aos formulários de envio
+            const formColetarDados = document.getElementById('formColetarDados');
+            if (formColetarDados) {
+                formColetarDados.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    // Implementar lógica de envio aqui
+                    document.getElementById('mensagemStatus').textContent = '✅ Dados enviados com sucesso!';
+                    formColetarDados.reset();
+                });
+            }
+            
+            const formColetarContabilidade = document.getElementById('formColetarContabilidade');
+            if (formColetarContabilidade) {
+                formColetarContabilidade.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    // Implementar lógica de envio aqui
+                    document.getElementById('mensagemStatusContabilidade').textContent = '✅ Dados contábeis enviados com sucesso!';
+                    formColetarContabilidade.reset();
+                });
+            }
+            
+            // Redimensionar gráficos quando a janela for redimensionada
+            window.addEventListener('resize', () => {
+                if (vendasChart) vendasChart.resize();
+                if (contabilidadeChart) contabilidadeChart.resize();
+            });
+        });
+    </script>
+</body>
+</html>
